@@ -128,8 +128,7 @@ checkTrackUD <- function(ud, track){
 
 
 ```{r constants, echo = FALSE}
-# CONSTANTS ----------------------------------------------------------------
-
+# CONSTANTS ----------------------------------------------------
 nrow <- 100
 ncol <- 100
 nsims <- nrow*ncol
@@ -755,7 +754,7 @@ ggplot(metaDat, aes(y = unlist(slctnCoff), x = unlist(smoothingFctr), color = fa
 We examined relationships between movement, habitat selection and landscape configuration by simulating telemetry data for an agent across a `r I(nrow)` by `r I(ncol)` domain of continuous habitat (ranging from 0 to 1; Figure 1). To test the relationships between these variables we stochastically changed variables controlling autocorrelation, agent habitat preference, thinning period (i.e., the number of samples that we threw out at the end of each simulation), and landscape autocorrelation.
 
 ### Movement 
-For a given cell, $c$, the agent was programmed to only move to rook cells (i.e., those cells that shared more than one point with cell $c$) within one cell of $c$ or stay in the same cell. The likelihood of the agent moving from a cell $c$ to any of it's neighbors or to stay in the same cell is given by Equation 1. 
+For a given cell, $c$, the agent was programmed only to move to rook cells (i.e., the set of neighboring cells $c_n$ that shared more than one point with cell $c$) within one cell of $c$ or stay in the same cell. The likelihood of the agent moving from a cell $c$ to any of it's neighbors or to stay in the same cell is given by Equation 1. 
 
 $$
 p(c_{n}) \ = \ e^{-p + \theta(c_n)} \ (1)
