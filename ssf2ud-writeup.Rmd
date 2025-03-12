@@ -129,8 +129,8 @@ checkTrackUD <- function(ud, track){
 
 ```{r constants, echo = FALSE}
 # CONSTANTS ----------------------------------------------------
-nrow <- 100
-ncol <- 100
+nrow <- 10
+ncol <- 10
 nsims <- nrow*ncol
 startTime <- as.POSIXct("2016-11-07 00:00:00 UTC")
 smoothingFactorL <- c(1,3,5,7)
@@ -180,13 +180,14 @@ if(!dir.exists(paste0(path, "/",domName))){
 }
 path <- paste0(path, "/", domName)
 # create and register worker nodes
-# cl <- parallel::makeCluster(4)
-# registerDoParallel(cl)
+cl <- parallel::makeCluster(2)
+registerDoParallel(cl)
 
 thetas <- c(0,1,2,3,4)
 movePenalties <- rep(0.25, lvars)
 smoothingFactors <- rep(5,lvars)
-thinVals <- c(1, seq(25, 250, by = 25))
+#thinVals <- c(1, seq(25, 250, by = 25))
+thinVals <- c(1, 2, 3, 4, 5)
 ```
 
 
@@ -420,7 +421,7 @@ write.table(metaDat,"C:/Users/jackx022/Desktop/SSF2UD-main/data/metaDat", sep = 
 ```{r generate UD stats, echo = FALSE, eval = FALSE}
 # SIMULATION -----------------------------------------------------------------
 simIter <- 1
-for(h in 1:1){
+for(h in 1:3){
   ud <- matrix(0, nrow = nrow, ncol = ncol)
   if(h == 1){
     thetas <- c(0,1,2,3,4)
@@ -437,7 +438,13 @@ for(h in 1:1){
     movePenalties <- rep(0.25, lvars)
     smoothingFactors <- c(1,3,5,7,9)
   }
-for(i in 1:lvars){
+  metaDat <- rbind(metaDat, foreach(i = 1:lvars, .combine = rbind) %dopar% {
+  library(amt)
+  library(tidyr)
+  library(raster)
+  library(terra)
+  library(dplyr)
+  library(MASS)
   smoothingFactor <- smoothingFactors[i]
   movePen <- movePenalties[i] 
   theta <- thetas[i]
@@ -448,8 +455,8 @@ for(i in 1:lvars){
     pad <- createPaddedMatrix(landscape, smoothingFactor)
     landscape_smooth <- smooth_pad_terra(pad, smoothingFactor, landscape)
   }
-  for(j in 1:nrow){
-    for(k in 1:ncol){
+  for(j in 1:5){
+    for(k in 1:5){
     print(h)
     # reset xyTrackDat
     xyTrackDat <- data.frame(matrix(NA, nrow = 0, ncol = 5))
@@ -566,7 +573,6 @@ for(i in 1:lvars){
     # ANALYSIS ------s-------------------------------------------------------------
     # thin the movement dataset
     xyTrackDat2 <- xyTrackDat
-    xyTrackDat2$id <- l
     # fit RSF
 rsfIn <- data.frame(rbind(cbind(land = landscape_smooth[xyTrackDat2$x.proj,][xyTrackDat2$y.proj],
                                 used = 1),
@@ -578,7 +584,7 @@ rsfOut <- glm(used ~ land, data = rsfIn, family = binomial)
     # ud <- checkTrackUD(ud, xyTrackDat2) 
     # plot(rast(landscape_smooth), col = gray.colors(10, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL))
     # lines(make_track(as_tibble(xyTrackDat2), .x = x.real, .y = y.real, .t = t), col = "red", lwd=2, xlim = c(0,50), ylim=c(0,50))
-    write.table(xyTrackDat2, paste0("C:/Users/jackx022/Desktop/SSF2UD-main/data/raw/outdat-sf-", id), sep = ",", append = TRUE, col.names = !file.exists(paste0("C:/Users/jackx022/Desktop/SSF2UD-main/data/raw/outdat-sf-", id)))
+    # write.table(xyTrackDat2, paste0("C:/Users/jackx022/Desktop/SSF2UD-main/data/raw/outdat-sf-", id), sep = ",", append = TRUE, col.names = !file.exists(paste0("C:/Users/jackx022/Desktop/SSF2UD-main/data/raw/outdat-sf-", id)))
 
 # update the ud
 # remove burnin
@@ -639,7 +645,6 @@ norms <- mvrnorm(ntraj, cbind(modISSA$model$coefficients['log_sl_'],
                vcov(modISSA$model)[1:2, 1:2])
 scale <- update_sl_distr(modISSA, log_sl_ = norms[1:nrow(norms), 1], sl_ = norms[1:nrow(norms), 2])$params$scale
 shape <- update_sl_distr(modISSA, log_sl_ = norms[1:nrow(norms), 1], sl_ = norms[1:nrow(norms), 2])$params$shape
-
 metaDat <- rbind(metaDat,cbind(
   id = id,
   theta = theta,
@@ -656,13 +661,13 @@ metaDat <- rbind(metaDat,cbind(
   movePenalty = unlist(movePen),
   nThin = unlist(nThin),
   betaRSF = rsfOut$coefficients[2]))
-       l <- l + 1
       }
     }
   }
-write.table(metaDat,"C:/Users/jackx022/Desktop/SSF2UD-main/data/metaDat", sep = ",", append = TRUE, col.names = !file.exists("C:/Users/jackx022/Desktop/SSF2UD-main/data/metaDat"))
-writeRaster(rast(landscape_smooth), filename = paste0("C:/Users/jackx022/Desktop/SSF2UD-main/data/raw/", "landscape-", id, ".tif"))
-  }
+# write.table(metaDat,"C:/Users/jackx022/Desktop/SSF2UD-main/data/metaDat", sep = ",", append = TRUE, col.names = !file.exists("C:/Users/jackx022/Desktop/SSF2UD-main/data/metaDat"))
+# writeRaster(rast(landscape_smooth), filename = paste0("C:/Users/jackx022/Desktop/SSF2UD-main/data/raw/", "landscape-", id, ".tif"))
+  return(metaDat)
+  })
   simIter <- simIter + 1
 }
 
