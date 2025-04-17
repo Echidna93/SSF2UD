@@ -683,9 +683,9 @@ for(h in 1:3){
 
 
 ## Introduction
-Landscape heterogeneity (i.e., the variation in land cover types and their arrangement therein) is fundamentally intertwined with ecological processes (@wiensCentralConceptsIssues2002). It's influence spans ecological scales from the individual (@vanmoorterUnderstandingScalesMovement2013) to the population (@muellerSearchNavigationDynamic2008) and this variation can influential in both space as well as time @aikensGreenscapeShapesSurfing2017a.
+Landscape heterogeneity (i.e., the composition and arrangement of land-cover types) is a major driver of ecological processes (@wiensCentralConceptsIssues2002). It's influence spans individual (@vanmoorterUnderstandingScalesMovement2013), population (@muellerSearchNavigationDynamic2008) and multi-species scales @tuckerMovingAnthropoceneGlobal2018. Composition and arrangement can vary in time as well and this temporal variation can influence animal movement patterns @aikensGreenscapeShapesSurfing2017a.
 
-Movement is primarily a behavioral adaption to landscape heterogeneity @mcpeekEvolutionDispersalSpatially1992. Heterogeneity influences movement from a variety of lenses including @mcpeekEvolutionDispersalSpatially1992. Individuals change the scale of their movement based on the scale of landscape heterogeneity (@vanmoorterUnderstandingScalesMovement2013). The accumulation of an individuals movement decisions creates patterns of space use (space use patterns; SUPs) which are at their core responses landscape heterogeneity (@vanmoorterMovementGlueConnecting2016, @muellerSearchNavigationDynamic2008).
+The primary behavioral adaptation to landscape heterogeneity is movement @mcpeekEvolutionDispersalSpatially1992. Heterogeneity influences movement from a variety of lenses including @mcpeekEvolutionDispersalSpatially1992. Individuals change the scale of their movement based on the scale of landscape heterogeneity (@vanmoorterUnderstandingScalesMovement2013). The accumulation of an individuals movement decisions creates patterns of space use (space use patterns; SUPs) which are at their core responses landscape heterogeneity (@vanmoorterMovementGlueConnecting2016, @muellerSearchNavigationDynamic2008).
 
 Broadly landscape heterogeneity can (for our purposes) be divided into compositional and structural heterogeneity @fahrigFunctionalLandscapeHeterogeneity2011.
 
