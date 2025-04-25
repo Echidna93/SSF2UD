@@ -9,7 +9,8 @@ output:
 bibliography: SSF2UD.json
 csl: ecology.csl
 ---
-```{r load packages, echo = FALSE, warning=FALSE}
+
+```{r load packages, echo = FALSE, warning = FALSE, message = FALSE}
 library(terra)
 library(raster) # for ncell function
 library(amt)
@@ -27,7 +28,6 @@ library(raster) # for writeRaster function
 # remotes::install_github("paleolimbot/rbbt") # for zotero git interface
 #library(rbibutils)
 ```
-
 
 ```{r helper functions, echo = FALSE}
 #' initiates a continous landscape matrix with habitat values between 0 and 1
@@ -136,7 +136,6 @@ checkTrackUD <- function(ud, track){
 
 ```
 
-
 ```{r constants, echo = FALSE}
 # CONSTANTS ----------------------------------------------------
 nrow <- 100
@@ -189,7 +188,6 @@ cl <- parallel::makeCluster(14)
 registerDoParallel(cl)
 
 ```
-
 
 ```{r generate single traj2, echo = FALSE, eval = FALSE}
 # SIMULATION ---------------`----------------------------------------------------
@@ -420,6 +418,7 @@ metaDat <- rbind(metaDat,cbind(
 #write.table(metaDat,"C:/Users/jackx022/Desktop/SSF2UD-main/data/metaDat", sep = ",", append = TRUE, col.names = !file.exists("C:/Users/jackx022/Desktop/SSF2UD-main/data/metaDat"))
 
 ```
+
 ```{r generate UD stats, echo = FALSE, eval = FALSE}
 # SIMULATION -----------------------------------------------------------------
 simIter <- 1
@@ -594,7 +593,8 @@ for(h in 1:3){
 
 
 ```
-```{r analysis}
+
+```{r analysis, echo = FALSE, eval = FALSE}
 
 # update the ud
 # remove burnin
@@ -681,45 +681,49 @@ for(h in 1:3){
 #   betaRSF = rsfOut$coefficients[2]))
 ```
 
+## Abstract:
 
 ## Introduction
-Landscape heterogeneity (i.e., the composition and arrangement of land-cover types) is a major driver of ecological processes (@wiensCentralConceptsIssues2002). It's influence spans individual (@vanmoorterUnderstandingScalesMovement2013), population (@muellerSearchNavigationDynamic2008) and multi-species scales @tuckerMovingAnthropoceneGlobal2018. Composition and arrangement can vary in time as well and this temporal variation can influence animal movement patterns @aikensGreenscapeShapesSurfing2017a.
 
-The primary behavioral adaptation to landscape heterogeneity is movement @mcpeekEvolutionDispersalSpatially1992. Heterogeneity influences movement from a variety of lenses including @mcpeekEvolutionDispersalSpatially1992. Individuals change the scale of their movement based on the scale of landscape heterogeneity (@vanmoorterUnderstandingScalesMovement2013). The accumulation of an individuals movement decisions creates patterns of space use (space use patterns; SUPs) which are at their core responses landscape heterogeneity (@vanmoorterMovementGlueConnecting2016, @muellerSearchNavigationDynamic2008).
+# discuss the role of landscape heterogeneity in movement; and more broadly
+Landscape heterogeneity (i.e., the composition and arrangement of land-cover types) is a major driver of ecological processes [@wiensCentralConceptsIssues2002]. The role of landscape heterogeneity cannot be overstated in the breadth of ecological issues it touches including disease spread [@deanglisBatCellularImmunity2024], genetics [@schlaepferGeneticEffectsAnthropogenic2018], biodiversity [@fletcherHabitatFragmentationGood2018; @fahrigHabitatFragmentationBad2019], and notably movement ecology [@aikensGreenscapeShapesSurfing2017a]. Movement is a primary behavioral adaption to landscape heterogeneity [@mcpeekEvolutionDispersalSpatially1992]. Landscape heterogeneity influences individual movement decisions at the local [@vanmoorterUnderstandingScalesMovement2013] and global scales [@tuckerMovingAnthropoceneGlobal2018]. While at larger scales, changes in landscape configuration and composition due can change movement patterns of many species globally [@tuckerMovingAnthropoceneGlobal2018].
 
-Broadly landscape heterogeneity can (for our purposes) be divided into compositional and structural heterogeneity @fahrigFunctionalLandscapeHeterogeneity2011.
+# discuss how individual movement decisions accumulate to create SUPs
+The accumulation of individual movement decisions which are influenced by landscape heterogeneity in turn influence the space-use patterns (SUPs) [@vanmoorterMovementGlueConnecting2016b].
 
-The diversity of animal movement and the lenses through which to view it has lead to the development of a variety of methodologies to classify and describe it in relation to observed landscape heterogeneity. Broadly, these methodologies are described as species habitat associations (SHAs; @matthiopoulosSpeciesHabitatAssociationsSpatial2020b). This can broadly be viewed as the area in which an animal restricts it's movement within possible areas where it could range. These methodologies can broadly be divided along phenomonological and mechanistic lines 
+# discuss various methodologies to classify and analyze SUPs
+The diversity of SUPs observed has lead to the development of a variety of methodologies to classify and describe them. Broadly, these methodologies are described as species habitat associations (SHAs; @matthiopoulosSpeciesHabitatAssociationsSpatial2020]. These methodologies can broadly be divided along phenomonological and mechanistic lines where the former is a tool used to describe emergent SUP from observed data while the latter is more concerned with the underlying mechanisms driving observed SUPs and thus can be used for prediction into novel environments @horneAnimalHomeRanges2020.
 
-The utilization distribution (UD) describes the probability that a given individual will be detected in a given location @winkleComparisonSeveralProbabilistic1975 and given that Ecology is fundamentally the study of the factors which drive the arrangement of organisms over space and time @eltonAnimalEcology1927 this quantity is of paramount importance. The UD has been utilized to help address conservation issues ranging from wildlife disease @jennelleMovementWhitetailedDeer2022a to energy development @cervantesUtilizationDistributionGlobal2023. 
+One-such tool that movement ecologists are concerned with is the utilization distribution or UD. The UD describes the probability that a given individual will be detected in a given location [@winkleComparisonSeveralProbabilistic1975] and thus is central to Ecology which is fundamentally the study of the distribution of organisms in time and space [@eltonAnimalEcology1927]. The UD has been utilized to help address conservation issues ranging from wildlife disease [@jennelleMovementWhitetailedDeer2022a ]to energy development [@cervantesUtilizationDistributionGlobal2023].
 
-To date quantifying a UD is mired by challenges that make them mathematically intractable, computationally expensive, or unreliable. For instance UDs can be readily quantified from systems of differential equations (@barnettAnalyticSteadystateSpace2008a). However, these methodologies are not a tractable solution for many ecologists and practitioners. Alternatively quantifying a UD might also involve computationally demanding simulations which take long periods of time to reach ergodicity. Another alternative to scale up utilization distributions from Resource Selection Functions (RSAs). Another alternative is to simply estimate the UD utilizing a probabilistic or geometric approach (@fiebergCouldYouPlease2012).
+To date quantifying a UD is mired by challenges that make them mathematically intractable, computationally expensive, or unreliable. For instance UDs can be readily quantified from systems of differential equations [@barnettAnalyticSteadystateSpace2008a] However, these methodologies are not a tractable solution for many ecologists and practitioners. Alternatively quantifying a UD might also involve computationally demanding simulations which take long periods of time to reach ergodicity. Another alternative to scale up utilization distributions from Resource Selection Functions (RSAs). Another alternative is to simply estimate the UD utilizing a probabilistic or geometric approach [@fiebergCouldYouPlease2012].
 
-Underlying the apparent distributions of organisms are of course the movements of individuals. These movements are influenced by the scale landscape heterogeneity (@vanmoorterUnderstandingScalesMovement2013). Importantly the build-up of these individual movement decisions which are influenced by landscape heterogeneity in turn influence the space-use patterns of individuals (@vanmoorterMovementGlueConnecting2016b).
-
-The purpose of this paper is to identify a method for scaling up movement processes to describe patterns of space-use. First we present a method for scaling up movement parameters which can be readily ascertained from spatial and movement packages in program-R.
+The purpose of this paper is to identify a method for scaling up movement processes to describe individual patterns of space-use. First we present a method for scaling up movement parameters which can be readily ascertained from spatial and movement packages in program-R.
 
 ## Methods
-We examined relationships between movement, habitat selection and landscape configuration by simulating telemetry data for an agent across a `r I(nrow)` by `r I(ncol)` domain of continuous habitat (ranging from 0 to 1; Figure 1). To test the relationships between these variables we stochastically changed variables controlling autocorrelation, agent habitat preference, thinning period (i.e., the number of samples that we threw out at the end of each simulation), and landscape autocorrelation.
 
-### Movement 
-For a given cell, $c$, the agent was programmed only to move to rook cells (i.e., the set of neighboring cells $c_n$ that shared more than one point with cell $c$) within one cell of $c$ or stay in the same cell. The likelihood of the agent moving from a cell $c$ to any of it's neighbors or to stay in the same cell is given by Equation 1. 
+We examined relationships between movement, habitat selection and landscape heterogeneity by simulating telemetry data for an agent across a `r I(nrow)` by `r I(ncol)` domain of continuous habitat (ranging from 0 to 1; Figure 1). To test the relationships between these variables we stochastically changed variables controlling autocorrelation, agent habitat preference, thinning period (i.e., the number of samples that we threw out at the end of each simulation), and landscape autocorrelation.
+
+### Movement
+
+For a given cell, $c$, the agent was programmed only to move to rook cells (i.e., the set of neighboring cells $c_n$ that shared more than one point with cell $c$) within one cell of $c$ or stay in the same cell. The likelihood of the agent moving from a cell $c$ to any of it's neighbors or to stay in the same cell is given by Equation 1.
 
 $$
 p(c_{n}) \ = \ e^{-p + \theta(c_n)} \ (1)
-$$
-Equation 1 gives the transition probability between the cell $c$ and a neighboring cell $c_n$ given by the exponential of the sum of the movement penalty $p$ (n.b., for the case of staying in the same cell $p = 0$) and the preference of the agent $\theta$ for the neighboring cell $c_n$. The values $p$ and $\theta$ were scholastically updated throughout the simulation to examine relationships between movement penalty ($p$), and preference $\theta$.
+$$ Equation 1 gives the transition probability between the cell $c$ and a neighboring cell $c_n$ given by the exponential of the sum of the movement penalty $p$ (n.b., for the case of staying in the same cell $p = 0$) and the preference of the agent $\theta$ for the neighboring cell $c_n$. The values $p$ and $\theta$ were scholastically updated throughout the simulation to examine relationships between movement penalty ($p$), and preference $\theta$.
 
 Since we wanted to simulate movement on a torus we utilized a mixture modular arithmetic and subtraction to ensure that if the agent left the original `r I(nrow)` by `r I(ncol)` domain that it ended it's step back inside the domain. For example if the agent started at position [1,1] we would add or subtract the size of the domain (depending upon whether the step was smaller or larger than allowed within the domain) to project the agent back in (Figure 3). However we did track the original real steps taken by the agent (Figure 4) in addition to the projected steps.
 
-
 ### Landscape autocorrelation
+
 To smooth the landscape we padded the `r I(nrow)` by `r I(ncol)` domain with cells side from the opposite side of the domain. The number of cells that we padded on each side correlated to the smoothing factor used. For example, for a smoothing factor of 3 we took 6 rows or columns from the opposite side and attached them to the domain. We then utilized the smoothing function *focal* from the R-package *terra* to take the average of the cells within a square moving window with size of the smoothing factor @hijmans_terraSpatialData2024. These cells were then averaged over a square with of size 3 (i.e., an area of 9 $units^2$). After smoothing the domain was cropped back to it's original size by removing the padded cells. Once the landscape was smoothed and cropped the resultant domain was then range normalized to ensure that the only the arrangement and not the intensity of the values changed between smoothed landscapes.
 
 ### Thinning period
-To examine how our thinning period changed the we chose between a number of different thinning values ranging from 100 to 250. That is, for a thinning value of 100 we would throw out all but every 100^{th} step likewise for a thinning value of 250 we would throw out all but every 250^{th} step.
+
+To examine how our thinning period changed the we chose between a number of different thinning values ranging from 100 to 250. That is, for a thinning value of 100 we would throw out all but every 100\^{th} step likewise for a thinning value of 250 we would throw out all but every 250\^{th} step.
 
 ### Modelling
+
 To retrieve the downstream selection coefficient ($\beta$) for a given habitat type $t$ the function $fit_issf$ from the R-package AMT @signerAnimalMovementTools2019. The equation to retrieve the downstream $\beta$ was a linear combination of the step length, the $log$ of the step length, and the habitat value associated with the cell at the end of the step.
 
 Coefficients were then taken from the fit model and new datasets were generated using the function $mvnorm$ from the R-packages MASS @venablesModernAppliedStatistics2002. These new $beta$ values were then used to generate new shape and scale parameters from AMT using the function $update_sl_distr$.
@@ -730,11 +734,10 @@ Once the full UD was acquired we also fit a simple RSF to the used versus availa
 
 ## CONCLUSIONS
 
-
 ![Figure 1. An image of an unsmoothed `r I(nrow)` by `r I(ncol)` domain.](./data/output/figures/land.png)
 
 ![Figure 2. An image of a `r I(nrow)` by `r I(ncol)` domain smoothed by a factor of 3.](./data/output/figures/land_smooth.png)
 
 ![Figure 3. An image of an `r I(nrow)` by `r I(ncol)` domain with possible steps (red) the agent could take from the first cell (blue).](./data/output/figures/land-possible-steps.png)
 
-![Figure 4. An image of an `r I(nrow)` by `r I(ncol)` domain with witha  smoothing factor of 3. A trajectory (outlined in red) is shown that extended beyond the original domain.](./data/movement-extended-land.png)
+![Figure 4. An image of an r I(nrow) by r I(ncol) domain with witha smoothing factor of 3. A trajectory (outlined in red) is shown that extended beyond the original domain.](./data/movement-extended-land.png) \## REFERENCES
